@@ -47,7 +47,7 @@ class Tensor:
         if isinstance(other,Tensor): 
             return Tensor(self.data + other.data)
         else:
-            return Tensor(seld.data + other)
+            return Tensor(self.data + other)
 
     def __sub__(self,other):
         """
@@ -56,7 +56,7 @@ class Tensor:
         if isinstance(other,Tensor): 
             return Tensor(self.data - other.data)
         else:
-            return Tensor(seld.data - other)
+            return Tensor(self.data - other)
 
     def __mul__(self,other):
         """
@@ -65,7 +65,7 @@ class Tensor:
         if isinstance(other,Tensor): 
             return Tensor(self.data * other.data)
         else:
-            return Tensor(seld.data * other)
+            return Tensor(self.data * other)
 
     def __truediv__(self,other):
         """
@@ -74,11 +74,49 @@ class Tensor:
         if isinstance(other,Tensor): 
             return Tensor(self.data / other.data)
         else:
-            return Tensor(seld.data / other)
+            return Tensor(self.data / other)
 
     def matmul(self,other):
         """
         Matrix multiplication of two tensors
+        """
+        pass
+
+    def __matmul__(self,other):
+        """Enable @ operator for matrix multiplication"""
+        return self.matmul(other)
+
+    def __getitem__(self,key):
+        """
+        Enable indexing and slicing operations on Tensors
+        """
+
+    def reshape(self,*shape):
+        """
+        Reshape tensor to new dimensions
+        """
+        pass
+
+    def transpose(self,dim0=None,dim1=None):
+        """
+        Transpose tensor dimensions
+        """
+        pass
+
+    def sum(self,axis=None,keepdims=False):
+        """
+        Sum tensor along specified axis
+        """
+        pass
+    def mean(self,axis=None,keepdims=False):
+        """
+        Compute mean of a tensor along specified axis
+        """
+        pass
+
+    def max(self,axis=None,keepdims=False):
+        """
+        Find maximum values along specified axis
         """
         pass
 
