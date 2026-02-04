@@ -94,7 +94,12 @@ class Tensor:
         """
         Enable indexing and slicing operations on Tensors
         """
-        pass
+
+        result_data = self.data[key]
+        if not isinstance(result_data,np.ndarray):
+            result_data = np.ndarray(result_data)
+
+        return Tensor(result_data)
 
     def reshape(self,*shape):
         """
@@ -129,7 +134,7 @@ class Tensor:
 
             else:
                 axes = list(range(len(self.data.shape)))
-                axes[dim1],axes[dim0] = axex[dim0],axes[dim1]
+                axes[dim1],axes[dim0] = axes[dim0],axes[dim1]
                 transposed_data = np.transpose(self.data,axes)
 
         return Tensor(transposed_data)
@@ -158,5 +163,12 @@ class Tensor:
 
 
 if __name__ == "__main__":
-    # do something here
-    print("testing tensors")
+    t = Tensor([1,2,3,4,5,6])
+    reshaped = t.reshape(2,3)
+    print(reshaped.data)
+
+    t = Tensor([[1,2,3],[4,5,6]])
+    transposed = t.transpose()
+    print(transposed.data)
+
+
