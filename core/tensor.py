@@ -60,7 +60,8 @@ class Tensor:
 
     def __mul__(self,other):
         """
-        Subtract two tensors elementwise(not matmul)
+        Multiply two tensors elementwise(not matmul). Also known as 
+        hadamard product. 
         """
         if isinstance(other,Tensor): 
             return Tensor(self.data * other.data)
@@ -80,7 +81,10 @@ class Tensor:
         """
         Matrix multiplication of two tensors
         """
-        pass
+        if isinstance(other,Tensor):
+            return Tensor(np.matmul(self.data,other.data))
+        else:
+            return Tensor(np.matmul(self.data,other))
 
     def __matmul__(self,other):
         """Enable @ operator for matrix multiplication"""
@@ -90,35 +94,67 @@ class Tensor:
         """
         Enable indexing and slicing operations on Tensors
         """
+        pass
 
     def reshape(self,*shape):
         """
         Reshape tensor to new dimensions
         """
-        pass
+        return Tensor(self.data.reshape(*shape))
 
     def transpose(self,dim0=None,dim1=None):
         """
-        Transpose tensor dimensions
+        Transpose tensor dimensions. Swap rows with columns
         """
-        pass
+
+        if dim0 is None and dim1 is None:
+            if len(self.data.shape) < 2:
+                return Tensor(self.data.copy())
+            else:
+                axes = list(range(len(self.data.shape)))
+                axes[-2],axes[-1] = axes[-1],axes[-2]
+                transposed_data = np.transpose(self.data,axes)
+        else:
+            if dim0 is None or dim1 is None:
+
+                provided = f"dim0={dim0}" if dim1 is None else f"dim1={dim1}"
+                missing  = f"dim1" if dim1 is None else f"dim0"
+
+                raise ValueError(
+                    f"Transpose requires both dimensions to be specified\n"
+                    f"Got {provided} but {missing} is None\n"
+                    f"Either both dim0 and dim1 must be specified, or neither (default swaps last two)\n"
+                    f"Use transpose({dim0 if dim0 is not None else 0},{dim1 if dim1 is not None else 1}) or just transpose()"
+                )
+
+            else:
+                axes = list(range(len(self.data.shape)))
+                axes[dim1],axes[dim0] = axex[dim0],axes[dim1]
+                transposed_data = np.transpose(self.data,axes)
+
+        return Tensor(transposed_data)
+
 
     def sum(self,axis=None,keepdims=False):
         """
         Sum tensor along specified axis
         """
-        pass
+        result = np.sum(self.data,axis=axis,keepdims=keepdims)
+        return Tensor(result)
+
     def mean(self,axis=None,keepdims=False):
         """
         Compute mean of a tensor along specified axis
         """
-        pass
+        result = np.mean(self.data,axis=axis,keepdims=keepdims)
+        return Tensor(result)
 
     def max(self,axis=None,keepdims=False):
         """
         Find maximum values along specified axis
         """
-        pass
+        result = np.max(self.data,axis=axis,keepdims=keepdims)
+        return Tensor(result)
 
 
 if __name__ == "__main__":
